@@ -45,4 +45,5 @@ topInd <- grep("TRUE", adjPvals <= 0.05)
 subsetMat <- gbmMat[topInd, ]
 
 ### PERFORM HIGH DIMENSIONAL GAUSSIAN MIXTURE MODELING
-bigClust <- hddc(t(subsetMat))
+bigClust <- hddc(t(subsetMat),
+                 K = 1:10)
