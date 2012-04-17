@@ -52,3 +52,38 @@ ggkm(gbmSurvFit,
      timeby = 365,
      main = "GBM K-M Plot By Class")
 
+###
+# Alternative visualization (density plots)
+fullSvdDF <- as.data.frame(t(rbind(fullSVD$v[ , 1], bigClust$class)))
+colnames(fullSvdDF) <- c("PrinComp1", "MolecularClass")
+densityPlotONE <- ggplot(fullSvdDF, 
+                        aes(x = PrinComp1,
+                            fill = factor(MolecularClass))) + 
+                              geom_density(alpha = 0.3) +
+                              opts(title = "Density Plot GBM Classes on PC1") +
+                              ylab("Density") +
+                              xlab("Molecular Class") +
+                              opts(plot.title = theme_text(size = 14))
+
+fullSvdDF <- as.data.frame(t(rbind(fullSVD$v[ , 2], bigClust$class)))
+colnames(fullSvdDF) <- c("PrinComp2", "MolecularClass")
+densityPlotTWO <- ggplot(fullSvdDF, 
+                      aes(x = PrinComp2,
+                          fill = factor(MolecularClass))) + 
+                            geom_density(alpha = 0.3) +
+                            opts(title = "Density Plot GBM Classes on PC2") +
+                            ylab("Density") +
+                            xlab("Molecular Class") +
+                            opts(plot.title = theme_text(size = 14))
+
+fullSvdDF <- as.data.frame(t(rbind(fullSVD$v[ , 2], bigClust$class)))
+colnames(fullSvdDF) <- c("PrinComp2", "MolecularClass")
+densityPlotTHREE <- ggplot(fullSvdDF, 
+                      aes(x = PrinComp2,
+                          fill = factor(MolecularClass))) + 
+                            geom_density(alpha = 0.3) +
+                            opts(title = "Density Plot GBM Classes on PC2") +
+                            ylab("Density") +
+                            xlab("Molecular Class") +
+                            opts(plot.title = theme_text(size = 14))
+
