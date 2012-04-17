@@ -15,6 +15,10 @@ require(mclust)
 require(ggplot2)
 require(corpcor)
 
+### TAKING ALL THE DATA AND LOOKING AT THE PC SPACE
+fullSVD <- fast.svd(subsetMat)
+fullClPlot <- clPairs(fullSVD$v[ , 1:4], bigClust$class)
+
 ### A FUNCTION TO QUICKLY PRODUCE VISUALS OF CLASSES
 visSubspace <- function(K){
   qMat <- bigClust$Q[[K]]
