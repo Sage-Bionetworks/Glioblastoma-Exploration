@@ -6,8 +6,8 @@
 # erich.huang@sagebase.org
 
 # NOTES
-# Here we take, the data subsetted to transcripts significantly associated with 
-# survival
+# Here we take the data subsetted to transcripts significantly associated with 
+# survival, perform p-value adjustment on these, subset the transcripts
 
 ### LOAD IN REQUIRED LIBRARIES
 require(HDclassif)
@@ -15,6 +15,7 @@ require(mclust)
 require(survival)
 require(Biobase)
 require(ggplot2)
+require(corpcor)
 
 ### ASSOCIATION OF EXPRESSION WITH SURVIVAL
 coxRes <- apply(gbmMat, 1, function(x){
@@ -47,3 +48,4 @@ subsetMat <- gbmMat[topInd, ]
 ### PERFORM HIGH DIMENSIONAL GAUSSIAN MIXTURE MODELING
 bigClust <- hddc(t(subsetMat),
                  K = 1:10)
+
