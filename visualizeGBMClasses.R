@@ -45,5 +45,6 @@ gbmSurvFit <- survfit(tmpSurv ~ bigClust$class)
 gbmStrata <- bigClust$class
 ggkm(gbmSurvFit, 
      ystratalabs = (c("ClassOne", "ClassTwo", "ClassThree")), 
-     timeby = 365)
+     timeby = 365,
+     main = "GBM K-M Plot By Class")
 
