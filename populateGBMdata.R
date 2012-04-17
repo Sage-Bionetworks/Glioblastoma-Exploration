@@ -58,7 +58,7 @@ tmpSurv <- Surv(gbmPat$survTime, gbmPat$surv)
 
 
 
-rm(list=setdiff(ls(), c("gbmPat", "gbmClin", "gbmMat")))
+rm(list=setdiff(ls(), c("gbmPat", "gbmClin", "gbmMat", "tmpSurv")))
 
 
 
