@@ -28,6 +28,16 @@ theseResults <- loadEntity("275029")
 bigClust <- theseResults$objects$bigClust
 subsetMat <- theseResults$objects$subsetMat
 
+#####
+### GENERATE KAPLAN MEIER PLOT OF GBM CLASSES
+#####
+gbmSurvFit <- survfit(tmpSurv ~ bigClust$class)
+gbmStrata <- bigClust$class
+ggkm(gbmSurvFit, 
+     ystratalabs = (c("ClassOne", "ClassTwo", "ClassThree")), 
+     timeby = 365,
+     main = "GBM K-M Plot By Class")
+
 
 
 ### TAKING ALL THE DATA AND LOOKING AT THE PC SPACE
@@ -58,14 +68,6 @@ visSubspace <- function(K){
 classOneObjects <- visSubspace(1)
 classTwoObjects <- visSubspace(2)
 classThreeObjects <- visSubspace(3)
-
-### GENERATE KAPLAN MEIER PLOT OF GBM CLASSES
-gbmSurvFit <- survfit(tmpSurv ~ bigClust$class)
-gbmStrata <- bigClust$class
-ggkm(gbmSurvFit, 
-     ystratalabs = (c("ClassOne", "ClassTwo", "ClassThree")), 
-     timeby = 365,
-     main = "GBM K-M Plot By Class")
 
 ###
 # Alternative visualization (density plots)
