@@ -9,9 +9,10 @@
 ##   - STORE 'SIGNIFICANT' GENES FOR FURTHER CLASSIFICATION
 #########################################################################
 
-## PULL IN GBM DATA
-## THIS WILL BE A loadEntity(12345) OF CODE ENTITY STORING getGBMdata.R
-source("./getGBMdata.R")
+require(synapseClient)
+
+## PULL IN GBM DATA BY SOURCING "populate data" CODE ENTITY FROM SYNAPSE
+loadGBM <- loadEntity("275016")
 
 
 #####
@@ -24,10 +25,28 @@ coxRes <- apply(gbmMat, 1, function(x){
 })
 
 ## P-VALUE HISTOGRAMS
-hist(coxRes[2, ], main = "p-value histogram",
-                  xlab = "p-value of gene expression on overall survival")
-hist(p.adjust(coxRes[2, ], method="BH"), main = "adjusted p-value histogram",
-                                         xlab = "adjusted p-value of gene expression on overall survival")
+pvalHist <- qplot(coxRes[2, ], geom = "histogram") + 
+  opts(title = "GBM Transcripts and Survival Unadjusted p-values")
+adjPvals <- p.adjust(coxRes[2, ], method = "BH")
+adjPvalHist <- qplot(adjPvals, geom = "histogram") + 
+  opts(title = "GBM Transcripts and Survival B-H Adjusted p-values")
+
+## VOLCANO PLOT
+vplotDF <- as.data.frame(t(rbind(log2(coxRes[1, ]), -1*log10(coxRes[2, ]))))
+colnames(vplotDF) <- (c("Column1", "Column2"))
+
+volcanoPlot <- ggplot(vplotDF, aes(Column1, Column2)) + geom_point() +
+  opts(title = "Volcano Plot GBM Transcripts") +
+  ylab("- log10 P-values") +
+  xlab("Transcripts") +
+  opts(plot.title = theme_text(size = 14))
 
 
+## STORE DATA IN SYNAPSE
+myData <- createEntity(Data(list(name = "results of association of expression with survival",
+                                 parentId = "275012")))
+myData <- addObject(myData, gbmMat)
+myData <- addObject(myData, tmpSurv)
+myData <- addObject(myData, coxRes)
+myData <- storeEntity(myData)
 

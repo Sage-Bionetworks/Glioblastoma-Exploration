@@ -9,11 +9,26 @@
 # Code to visualize GBM molecular classes as defined by the class discovery
 # object.
 
+
 ### LOAD IN REQUIRED LIBRARIES
+require(synapseClient)
 require(HDclassif)
 require(mclust)
 require(ggplot2)
 require(corpcor)
+require(survival)
+
+## LOAD DATA FROM PREVIOUS STEPS
+theseData <- loadEntity("275017")
+coxRes <- theseData$objects$coxRes
+gbmMat <- theseData$objects$gbmMat
+tmpSurv <- theseData$objects$tmpSurv
+
+theseResults <- loadEntity("275029")
+bigClust <- theseResults$objects$bigClust
+subsetMat <- theseResults$objects$subsetMat
+
+
 
 ### TAKING ALL THE DATA AND LOOKING AT THE PC SPACE
 fullSVD <- fast.svd(subsetMat)
