@@ -76,13 +76,13 @@ densityPlotTWO <- ggplot(fullSvdDF,
                             xlab("Molecular Class") +
                             opts(plot.title = theme_text(size = 14))
 
-fullSvdDF <- as.data.frame(t(rbind(fullSVD$v[ , 2], bigClust$class)))
-colnames(fullSvdDF) <- c("PrinComp2", "MolecularClass")
+fullSvdDF <- as.data.frame(t(rbind(fullSVD$v[ , 4], bigClust$class)))
+colnames(fullSvdDF) <- c("PrinComp4", "MolecularClass")
 densityPlotTHREE <- ggplot(fullSvdDF, 
-                      aes(x = PrinComp2,
+                      aes(x = PrinComp4,
                           fill = factor(MolecularClass))) + 
                             geom_density(alpha = 0.3) +
-                            opts(title = "Density Plot GBM Classes on PC2") +
+                            opts(title = "Density Plot GBM Classes on PC4") +
                             ylab("Density") +
                             xlab("Molecular Class") +
                             opts(plot.title = theme_text(size = 14))
