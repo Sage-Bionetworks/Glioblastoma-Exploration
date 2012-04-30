@@ -9,8 +9,10 @@
 # Code to visualize GBM molecular classes as defined by the class discovery
 # object.
 
+visualizeGBMClasses <- function(){
 
 ### LOAD IN REQUIRED LIBRARIES
+print("Loading required libraries")
 require(synapseClient)
 require(HDclassif)
 require(mclust)
@@ -19,18 +21,20 @@ require(corpcor)
 require(survival)
 
 ## LOAD DATA FROM PREVIOUS STEPS
+print("Loading intermediate data from Synapse")
 theseData <- loadEntity("299114")
 coxRes <- theseData$objects$coxRes
 gbmMat <- theseData$objects$gbmMat
 tmpSurv <- theseData$objects$tmpSurv
 
-theseResults <- loadEntity("275029")
+theseResults <- loadEntity("299124")
 bigClust <- theseResults$objects$bigClust
 subsetMat <- theseResults$objects$subsetMat
 
 #####
 ### GENERATE KAPLAN MEIER PLOT OF GBM CLASSES
 #####
+print("Generating a Kaplan-Meier Plot of GBM Classes")
 gbmSurvFit <- survfit(tmpSurv ~ bigClust$class)
 gbmStrata <- bigClust$class
 ggkm(gbmSurvFit, 
@@ -41,6 +45,7 @@ ggkm(gbmSurvFit,
 
 
 ### TAKING ALL THE DATA AND LOOKING AT THE PC SPACE
+print("Generating plots of the SVD space keyed by Class")
 fullSVD <- fast.svd(subsetMat)
 fullClPlot <- clPairs(fullSVD$v[ , 1:4], bigClust$class)
 
@@ -71,6 +76,7 @@ classThreeObjects <- visSubspace(3)
 
 ###
 # Alternative visualization (density plots)
+print("Generating density plots")
 fullSvdDF <- as.data.frame(t(rbind(fullSVD$v[ , 1], bigClust$class)))
 colnames(fullSvdDF) <- c("PrinComp1", "MolecularClass")
 densityPlotONE <- ggplot(fullSvdDF, 
@@ -103,4 +109,4 @@ densityPlotTHREE <- ggplot(fullSvdDF,
                             ylab("Density") +
                             xlab("Molecular Class") +
                             opts(plot.title = theme_text(size = 14))
-
+}
