@@ -19,7 +19,7 @@ require(corpcor)
 require(survival)
 
 ## LOAD DATA FROM PREVIOUS STEPS
-theseData <- loadEntity("275017")
+theseData <- loadEntity("299114")
 coxRes <- theseData$objects$coxRes
 gbmMat <- theseData$objects$gbmMat
 tmpSurv <- theseData$objects$tmpSurv

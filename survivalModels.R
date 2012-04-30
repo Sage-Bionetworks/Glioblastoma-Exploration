@@ -9,21 +9,21 @@
 ##   - STORE 'SIGNIFICANT' GENES FOR FURTHER CLASSIFICATION
 #########################################################################
 
-survivalModels <- function(x){
+survivalModels <- function(){
 
-print("Loading local data")
-gbmPat <- x$gbmPat
-gbmClin <- x$gbmClin
-gbmMat <- x$gbmMat
-tmpSurv <- x$tmpSurv
- 
+print("Loading required packages")
 require(synapseClient)
+require(ggplot2)
+require(survival)
 
-## PULL IN GBM DATA BY SOURCING "populate data" CODE ENTITY FROM SYNAPSE
-print("Loading GBM data from Synapse")
-loadGBM <- loadEntity("275016")
-
-
+## PULL IN GBM DATA BY SOURCING "intermediate data a" ENTITY FROM SYNAPSE
+print("Loading data from Synapse")
+dataReturn <- loadEntity(299091)
+gbmPat <- dataReturn$objects$gbmPat
+gbmClin <- dataReturn$objects$gbmClin
+gbmMat <- dataReturn$objects$gbmMat
+tmpSurv <- dataReturn$objects$tmpSurv
+ 
 #####
 ## ASSOCIATION OF EXPRESSION WITH SURVIVAL
 #####
@@ -61,15 +61,6 @@ return(list("gbmMat" = gbmMat,
             "pvalHist" = pvalHist,
             "adjPvalHist" = adjPvalHist,
             "volcanoPlot" = volcanoPlot))
-
-
-## STORE DATA IN SYNAPSE
-# myData <- createEntity(Data(list(name = "results of association of expression with survival",
-#                                  parentId = "275012")))
-# myData <- addObject(myData, gbmMat)
-# myData <- addObject(myData, tmpSurv)
-# myData <- addObject(myData, coxRes)
-# myData <- storeEntity(myData)
-
+## These objects are saved to Synapse Entity 299114
 }
 
