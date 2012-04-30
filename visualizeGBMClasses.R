@@ -19,6 +19,7 @@ require(mclust)
 require(ggplot2)
 require(corpcor)
 require(survival)
+require(reshape)
 
 ## LOAD DATA FROM PREVIOUS STEPS
 print("Loading intermediate data from Synapse")
@@ -31,13 +32,17 @@ theseResults <- loadEntity("299124")
 bigClust <- theseResults$objects$bigClust
 subsetMat <- theseResults$objects$subsetMat
 
+## BRING IN THE ggkm FUNCTION FROM SYNAPSE
+ggkmEnt <- loadEntity(299141)
+attach(ggkmEnt)
+
 #####
 ### GENERATE KAPLAN MEIER PLOT OF GBM CLASSES
 #####
 print("Generating a Kaplan-Meier Plot of GBM Classes")
 gbmSurvFit <- survfit(tmpSurv ~ bigClust$class)
 gbmStrata <- bigClust$class
-ggkm(gbmSurvFit, 
+gbmKMPlot <- ggkm2(gbmSurvFit, 
      ystratalabs = (c("ClassOne", "ClassTwo", "ClassThree")), 
      timeby = 365,
      main = "GBM K-M Plot By Class")
@@ -109,4 +114,13 @@ densityPlotTHREE <- ggplot(fullSvdDF,
                             ylab("Density") +
                             xlab("Molecular Class") +
                             opts(plot.title = theme_text(size = 14))
+
+return(list("gbmKMPlot" = gbmKMPlot,
+            "fullClPlot" = fullClPlot,
+            "classOneObjects" = classOneObjects,
+            "classTwoObjects" = classTwoObjects,
+            "classThreeObjects" = classThreeObjects,
+            "densityPlotONE" = densityPlotONE,
+            "densityPlotTWO" = densityPlotTWO,
+            "densityPlotThree" = densityPlotTHREE))
 }
