@@ -6,7 +6,7 @@
 #########################################################################
 
 populateGBMdata <- function(){
-
+print("Loading require packages")
 require(synapseClient)
 require(Biobase)
 require(survival)
@@ -15,6 +15,7 @@ require(survival)
 #####
 ## EXPRESSION DATA
 #####
+print("Loading molecular data from Synapse")
 ge <- loadEntity("274865")
 gbmExprSet <- ge$objects$coherentEset
 gbmMat <- exprs(gbmExprSet)
@@ -24,6 +25,7 @@ ne <- loadEntity("274544")
 tmpNames <- featureNames(ne$objects$eset)
 
 ## SUBSET TO THOSE WITHOUT NAS
+print("Processing molecular data")
 id <- which(colSums(is.na(gbmMat)) != nrow(gbmMat))
 gbmMat <- gbmMat <- gbmMat[, id]
 rownames(gbmMat) <- tmpNames
@@ -46,12 +48,14 @@ thesePats <- thesePats[!idd]
 #####
 ## CLINICAL DATA
 #####
+print("Loading clinical data from Synapse")
 gc <- loadEntity("274426")
 gbmClin <- gc$objects$clinAll
 gbmPat <- gbmClin$clinical_patient_public_gbm
 rownames(gbmPat) <- gbmPat$bcr_patient_barcode
 gbmPat <- gbmPat[ thesePats, ]
 
+print("Creating survival object")
 gbmPat$vital_status[ gbmPat$vital_status == "[Not Available]" ] <- NA
 gbmPat$survTime <- as.numeric(gbmPat$days_to_death)
 gbmPat$surv <- ifelse( gbmPat$vital_status=="DECEASED", 1, 0)
@@ -59,7 +63,7 @@ gbmPat$survTime[ which(gbmPat$vital_status == "LIVING") ] <- as.numeric(gbmPat$d
 tmpSurv <- Surv(gbmPat$survTime, gbmPat$surv)
 
 
-
+print("Generating output list")
 rm(list=setdiff(ls(), c("gbmPat", "gbmClin", "gbmMat", "tmpSurv")))
 
 return(list("gbmPat" = gbmPat,
