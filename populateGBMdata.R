@@ -5,6 +5,8 @@
 ##   - CLINICAL DATA
 #########################################################################
 
+populateGBMdata <- function(){
+
 require(synapseClient)
 require(Biobase)
 require(survival)
@@ -60,5 +62,10 @@ tmpSurv <- Surv(gbmPat$survTime, gbmPat$surv)
 
 rm(list=setdiff(ls(), c("gbmPat", "gbmClin", "gbmMat", "tmpSurv")))
 
+return(list("gbmPat" = gbmPat,
+            "gbmClin" = gbmClin,
+            "gbmMat" = gbmMat,
+            "tmpSurv" = tmpSurv))
+}
 
 
