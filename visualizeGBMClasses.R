@@ -19,7 +19,6 @@ visualizeGBMClasses <- function(){
   require(ggplot2)
   require(corpcor)
   require(survival)
-  require(reshape)
   
   ## BRING IN THE ggkm FUNCTION FROM SYNAPSE
   ggkmEnt <- loadEntity(299147)
@@ -35,6 +34,8 @@ visualizeGBMClasses <- function(){
   theseResults <- loadEntity("299124")
   bigClust <- theseResults$objects$bigClust
   subsetMat <- theseResults$objects$subsetMat
+  
+  require(plyr)
   
   #####
   ### GENERATE KAPLAN MEIER PLOT OF GBM CLASSES
